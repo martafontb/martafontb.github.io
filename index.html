@@ -41,6 +41,7 @@
 
     html {
       font-size: 14px;
+      overflow-x: hidden;
     }
 
     body {
@@ -1025,16 +1026,17 @@
     gsap.to(['#drop-1', '#drop-2'], { y: -8, duration: 1.8, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 0.6 })
 
     // ── Apple leans toward work section on scroll ──
-    gsap.to('.illustration-top', {
-      rotation: 4,
-      transformOrigin: 'center bottom',
-      duration: 1.2,
-      ease: 'power2.inOut',
-      scrollTrigger: {
-        trigger: '.work-section',
-        start: 'top 85%',
-        toggleActions: 'play none none reverse'
-      }
+    // Trigger at 200px scroll so it never fires on page load (work section
+    // is already visible at scroll 0 on desktop, making element-based
+    // triggers fire immediately).
+    ScrollTrigger.create({
+      start: 200,
+      onEnter: () => gsap.to('.illustration-top', {
+        rotation: 4, transformOrigin: 'center bottom', duration: 1.2, ease: 'power2.inOut'
+      }),
+      onLeaveBack: () => gsap.to('.illustration-top', {
+        rotation: 0, transformOrigin: 'center bottom', duration: 1.2, ease: 'power2.inOut'
+      })
     })
 
     // ── Apple falls asleep on inactivity ──
