@@ -20,6 +20,11 @@
       href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap">
   </noscript>
   <link rel="icon" type="image/png" href="./favicon.png">
+  <script>
+    // Apply saved theme before first paint to avoid flash
+    const saved = localStorage.getItem('theme')
+    if (saved) document.documentElement.dataset.theme = saved
+  </script>
   <style>
     *,
     *::before,
@@ -31,17 +36,41 @@
     }
 
     :root {
+      --bg: #f0ede6;
+      --fg: #1a1917;
+      --fg-dim: rgba(26, 25, 23, 0.5);
+      --blue: #0061EF;
+      --muted: rgba(26, 25, 23, 0.14);
+      --row-hover: rgba(26, 25, 23, 0.04);
+      --cursor-border: rgba(26, 25, 23, 0.3);
+      --overlay: rgba(100, 98, 94, 0.5);
+      --gap: 1.5rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #111110;
+        --fg: #e8e6e0;
+        --fg-dim: rgba(232, 230, 224, 0.45);
+        --muted: rgba(232, 230, 224, 0.18);
+        --row-hover: rgba(232, 230, 224, 0.03);
+        --cursor-border: rgba(232, 230, 224, 0.35);
+        --overlay: rgba(17, 17, 16, 0.55);
+      }
+    }
+
+    :root[data-theme="dark"] {
       --bg: #111110;
       --fg: #e8e6e0;
       --fg-dim: rgba(232, 230, 224, 0.45);
-      --blue: #0061EF;
       --muted: rgba(232, 230, 224, 0.18);
-      --gap: 1.5rem;
+      --row-hover: rgba(232, 230, 224, 0.03);
+      --cursor-border: rgba(232, 230, 224, 0.35);
+      --overlay: rgba(17, 17, 16, 0.55);
     }
 
     html {
       font-size: 14px;
-      overflow-x: hidden;
     }
 
     body {
@@ -50,7 +79,8 @@
       font-family: 'Space Mono', 'Courier New', monospace;
       max-width: 960px;
       margin: 0 auto;
-      padding: 1.5rem var(--gap) 0;
+      padding: 1.5rem var(--gap) 4rem;
+      overflow-x: hidden;
       text-transform: uppercase;
       letter-spacing: 0.03em;
       opacity: 0;
@@ -85,6 +115,27 @@
       letter-spacing: 0.06em;
     }
 
+    .header-right {
+      display: flex;
+      align-items: baseline;
+      gap: 1.2rem;
+    }
+
+    #theme-toggle {
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: inherit;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--fg-dim);
+      transition: color 0.2s;
+    }
+
+    #theme-toggle:hover {
+      color: var(--fg);
+    }
+
     /* ── Top section ── */
     .top-section {
       display: flex;
@@ -98,6 +149,14 @@
       color: var(--fg-dim);
       padding: 1.25rem 0 0;
       max-width: 44ch;
+    }
+
+    .bio-note {
+      font-size: 0.52rem;
+      letter-spacing: 0.1em;
+      color: var(--fg-dim);
+      opacity: 0.6;
+      margin-top: 0.75rem;
     }
 
     .illustration-top {
@@ -226,7 +285,7 @@
     }
 
     .project-row:hover {
-      background-color: rgba(232, 230, 224, 0.03);
+      background-color: var(--row-hover);
       transform: translateX(4px);
     }
 
@@ -388,6 +447,12 @@
       }
     }
 
+    @media (max-width: 640px) {
+      #cart-badge {
+        top: 3.5rem;
+      }
+    }
+
     /* ── Desktop: 2-col top ── */
     @media (min-width: 640px) {
       .top-section {
@@ -450,7 +515,7 @@
     .cursor-ring {
       width: 30px;
       height: 30px;
-      border: 1px solid rgba(232, 230, 224, 0.35);
+      border: 1px solid var(--cursor-border);
       border-radius: 50%;
       position: fixed;
       top: 0;
@@ -571,6 +636,181 @@
       pointer-events: none;
       z-index: 9996;
     }
+
+    /* ── Mini Cart ── */
+    #mini-cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--overlay);
+      z-index: 9988;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #mini-cart {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(300px, calc(100vw - 40px));
+      height: 100vh;
+      height: 100dvh;
+      background: var(--bg);
+      border-left: 1px solid var(--muted);
+      z-index: 9989;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      visibility: hidden;
+      overflow: hidden;
+    }
+
+    #mini-cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 1.5rem;
+      border-bottom: 1px solid var(--muted);
+      font-size: 0.56rem;
+      letter-spacing: 0.14em;
+      flex-shrink: 0;
+    }
+
+    #mini-cart-close {
+      background: none;
+      border: none;
+      color: var(--fg-dim);
+      font-family: 'Space Mono', 'Courier New', monospace;
+      font-size: 1rem;
+      letter-spacing: 0;
+      text-transform: none;
+      line-height: 1;
+      padding: 0;
+      transition: color 0.15s;
+    }
+
+    #mini-cart-close:hover {
+      color: var(--fg);
+    }
+
+    #mini-cart-illustration {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem 1rem 0.75rem;
+      border-bottom: 1px solid var(--muted);
+    }
+
+    #mini-cart-illustration svg {
+      height: 100%;
+      width: auto;
+      max-width: 100%;
+      max-height: 220px;
+      display: block;
+      overflow: visible;
+    }
+
+    #mini-cart-item {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--muted);
+      flex-shrink: 0;
+    }
+
+    .cart-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .cart-item-name {
+      font-size: 0.65rem;
+      letter-spacing: 0.05em;
+      color: var(--fg);
+      margin-bottom: 0.2rem;
+    }
+
+    .cart-item-meta,
+    .cart-item-price {
+      font-size: 0.57rem;
+      letter-spacing: 0.06em;
+      color: var(--fg-dim);
+      line-height: 1.8;
+    }
+
+    .cart-item-qty {
+      font-size: 0.57rem;
+      letter-spacing: 0.1em;
+      color: var(--fg-dim);
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    #mini-cart-footer {
+      padding: 1rem 1.5rem 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      color: var(--fg-dim);
+      margin-bottom: 1rem;
+    }
+
+    #mini-cart-checkout {
+      display: block;
+      width: 100%;
+      background: var(--blue);
+      border: 1px solid var(--blue);
+      color: var(--bg);
+      font-family: 'Space Mono', 'Courier New', monospace;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.7rem 1rem;
+      appearance: none;
+      outline: none;
+      transition: background 0.2s, color 0.2s;
+      margin-bottom: 0.75rem;
+    }
+
+    #mini-cart-checkout:hover {
+      background: transparent;
+      color: var(--blue);
+    }
+
+    .cart-contact-link {
+      text-align: center;
+      font-size: 0.57rem;
+      letter-spacing: 0.06em;
+    }
+
+    .cart-contact-link a {
+      color: var(--fg-dim);
+      text-decoration: none;
+      background: linear-gradient(var(--blue), var(--blue)) no-repeat 100% 100% / 0 1px;
+      transition: color 0.2s, background-size 0.35s ease;
+    }
+
+    .cart-contact-link a:hover {
+      color: var(--blue);
+      background-position: 0 100%;
+      background-size: 100% 1px;
+    }
+
+    .cart-shipping-note {
+      font-size: 0.52rem;
+      letter-spacing: 0.09em;
+      color: var(--fg-dim);
+      text-align: center;
+      margin-bottom: 0.8rem;
+      opacity: 0.65;
+    }
   </style>
 </head>
 
@@ -582,15 +822,51 @@
   <!-- ── Cart badge (hidden until add to cart) ── -->
   <div id="cart-badge">[ <span id="cart-count">1</span> ] in cart</div>
 
+  <!-- ── Mini Cart ── -->
+  <div id="mini-cart-overlay"></div>
+  <div id="mini-cart">
+    <div id="mini-cart-header">
+      <span>Cart (1)</span>
+      <button id="mini-cart-close">×</button>
+    </div>
+    <div id="mini-cart-illustration">
+      <!-- Hello SVG moved here by JS on load -->
+    </div>
+    <div id="mini-cart-item">
+      <div class="cart-item-row">
+        <div class="cart-item-info">
+          <div class="cart-item-name">Marta Font</div>
+          <div class="cart-item-meta">Shopify Developer, Barcelona</div>
+        </div>
+        <span class="cart-item-qty">Qty: 1</span>
+      </div>
+    </div>
+    <div id="mini-cart-footer">
+      <div class="cart-total">
+        <span>Total</span>
+        <span>Let's talk</span>
+      </div>
+      <button id="mini-cart-checkout">[ Proceed to checkout → ]</button>
+      <div class="cart-shipping-note">✓ Free shipping &nbsp;·&nbsp; Est. delivery 3–4 business days</div>
+      <div class="cart-contact-link">
+        <a href="mailto:martafontb@gmail.com">martafontb@gmail.com</a>
+      </div>
+    </div>
+  </div>
+
   <!-- ── Header ── -->
   <header>
     <span class="name">Marta Font</span>
-    <span class="status">Online 24/7/365</span>
+    <div class="header-right">
+      <button id="theme-toggle" aria-label="Toggle colour scheme">◑</button>
+      <span class="status">Online 24/7/365</span>
+    </div>
   </header>
 
   <!-- ── Top: bio + illustration ── -->
   <div class="top-section">
     <p class="bio">Shopify developer. Custom theme work for independent brands, done remotely from Barcelona.</p>
+    <p class="bio-note">✓ Free shipping &nbsp;·&nbsp; No minimums &nbsp;·&nbsp; Satisfaction guaranteed</p>
 
     <div class="illustration-top">
       <svg id="svg-apple" width="773" height="770" viewBox="0 0 773 770" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -887,7 +1163,7 @@
 
   <!-- ── Education ── -->
   <div class="education-section">
-    <div class="education-header">Education</div>
+    <div class="education-header">Teaching</div>
     <div class="education-body">
       <a href="https://www.superhi.com/catalog/building-shopify-stores" target="_blank"
         rel="noopener noreferrer">Building Shopify Stores</a> — SuperHi
@@ -1037,17 +1313,11 @@
     </svg>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script>
     gsap.registerPlugin(ScrollTrigger)
 
-    // ── Smooth scroll ──
-    const lenis = new Lenis()
-    lenis.on('scroll', ScrollTrigger.update)
-    gsap.ticker.add((time) => { lenis.raf(time * 1000) })
-    gsap.ticker.lagSmoothing(0)
 
     window.addEventListener('load', () => {
       document.body.classList.add('loaded');
@@ -1169,16 +1439,7 @@
       clearProps: 'transform'
     })
 
-    // Hello Character entry
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: '.illustration-bottom',
-        start: 'top 90%'
-      }
-    })
-      .from('#g16', { y: 30, opacity: 0, duration: 0.8, ease: 'back.out(1.4)' })
-      .to('#g102', { scale: 1, duration: 0.5, ease: 'back.out(2)' }, '-=0.2')
-      .to('#hello-text', { scale: 1, duration: 0.4, ease: 'back.out(1.7)' }, '-=0.3')
+    // Hello Character — moved into mini cart, animation fires on cart open
 
     // ── Continuous Floating (Removed for stability) ──
     gsap.set('#g78', { transformOrigin: '430px 189px' })
@@ -1238,7 +1499,7 @@
 
     window.addEventListener('mousemove', resetSleepTimer, { passive: true })
     window.addEventListener('keydown', resetSleepTimer)
-    lenis.on('scroll', resetSleepTimer)
+    window.addEventListener('scroll', resetSleepTimer, { passive: true })
     resetSleepTimer()
 
     // ── Add to Cart ──
@@ -1246,11 +1507,72 @@
     const cartBadge = document.getElementById('cart-badge')
     let inCart = false
 
-    gsap.set(cartBadge, { opacity: 0, scale: 0, transformOrigin: 'top right' })
+    // Capture natural badge position BEFORE GSAP collapses it to scale:0
+    const cartBadgeRect = cartBadge.getBoundingClientRect()
+    const badgeCenterX = cartBadgeRect.left + cartBadgeRect.width / 2
+    const badgeCenterY = cartBadgeRect.top + cartBadgeRect.height / 2
 
-    cartBadge.addEventListener('click', () => {
-      lenis.scrollTo('.contact-section', { offset: -20, duration: 1 })
+    gsap.set(cartBadge, { opacity: 0, scale: 0, transformOrigin: 'top right' })
+    gsap.set('#mini-cart', { x: '100%', visibility: 'hidden' })
+
+    // ── Move Hello SVG into mini cart illustration slot ──
+    const illustrationBottom = document.querySelector('.illustration-bottom')
+    const miniCartIllustration = document.getElementById('mini-cart-illustration')
+    if (illustrationBottom && miniCartIllustration) {
+      const svgHelloEl = illustrationBottom.querySelector('#svg-hello')
+      if (svgHelloEl) {
+        miniCartIllustration.appendChild(svgHelloEl)
+        illustrationBottom.remove()
+      }
+    }
+
+    // ── Mini Cart open / close ──
+    let miniCartOpen = false
+
+    function openMiniCart() {
+      if (miniCartOpen) return
+      miniCartOpen = true
+      // Reset hello for fresh entry animation
+      gsap.set('#g16', { y: 18, opacity: 0 })
+      gsap.set(['#g102', '#hello-text'], { scale: 0, transformOrigin: '108px 180px' })
+      gsap.to('#mini-cart-overlay', { opacity: 1, pointerEvents: 'auto', duration: 0.3 })
+      gsap.set('#mini-cart', { visibility: 'visible' })
+      gsap.to('#mini-cart', { x: 0, duration: 0.4, ease: 'power3.out' })
+      // Animate character in after panel lands
+      gsap.timeline({ delay: 0.42 })
+        .to('#g16', { y: 0, opacity: 1, duration: 0.7, ease: 'back.out(1.4)' })
+        .to('#g102', { scale: 1, duration: 0.5, ease: 'back.out(2)' }, '-=0.2')
+        .to('#hello-text', { scale: 1, duration: 0.4, ease: 'back.out(1.7)' }, '-=0.3')
+    }
+
+    function closeMiniCart() {
+      if (!miniCartOpen) return
+      miniCartOpen = false
+      gsap.to('#mini-cart', {
+        x: '100%', duration: 0.35, ease: 'power3.in',
+        onComplete: () => gsap.set('#mini-cart', { visibility: 'hidden' })
+      })
+      gsap.to('#mini-cart-overlay', { opacity: 0, pointerEvents: 'none', duration: 0.25 })
+    }
+
+    document.getElementById('mini-cart-close').addEventListener('click', closeMiniCart)
+    document.getElementById('mini-cart-overlay').addEventListener('click', closeMiniCart)
+    document.getElementById('mini-cart-checkout').addEventListener('click', () => {
+      window.open('mailto:martafontb@gmail.com')
     })
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && miniCartOpen) closeMiniCart()
+    })
+
+    // Add cursor-hover to mini cart interactive elements
+    ;['#mini-cart-close', '#mini-cart-checkout', '.cart-contact-link a'].forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'))
+        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'))
+      })
+    })
+
+    cartBadge.addEventListener('click', () => miniCartOpen ? closeMiniCart() : openMiniCart())
     cartBadge.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'))
     cartBadge.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'))
 
@@ -1272,13 +1594,8 @@
       const startX = btnRect.left + btnRect.width / 2
       const startY = btnRect.top + btnRect.height / 2
 
-      // Cart badge lands at top-right (compute from CSS: top 1.5rem, right 1.5rem)
-      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize)
-      const badgeX = window.innerWidth - 1.5 * rem
-      const badgeY = 1.5 * rem
-
-      const dx = badgeX - startX
-      const dy = badgeY - startY
+      const dx = badgeCenterX - startX
+      const dy = badgeCenterY - startY
 
       gsap.set(particle, { x: startX, y: startY, xPercent: -50, yPercent: -50 })
 
@@ -1290,6 +1607,7 @@
           gsap.timeline()
             .to(cartBadge, { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(2.5)' })
             .to(cartBadge, { scale: 1.15, duration: 0.08, yoyo: true, repeat: 1, ease: 'power2.out' }, '-=0.05')
+            .set(cartBadge, { clearProps: 'transform,transformOrigin' })
           // Swap button to checkout state
           addToCartBtn.textContent = '[ proceed to checkout \u2192 ]'
           addToCartBtn.classList.add('checkout-state')
@@ -1301,6 +1619,23 @@
         .to(particle, { y: `+=${dy + 90}`, duration: 0.33, ease: 'power2.in' }, 0.27)
         .to(particle, { scale: 0, opacity: 0, duration: 0.12 }, 0.48)
     })
+
+    // ── Theme toggle ──
+    const themeToggle = document.getElementById('theme-toggle')
+
+    function getEffectiveTheme() {
+      if (document.documentElement.dataset.theme) return document.documentElement.dataset.theme
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const next = getEffectiveTheme() === 'dark' ? 'light' : 'dark'
+      document.documentElement.dataset.theme = next
+      localStorage.setItem('theme', next)
+    })
+
+    themeToggle.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'))
+    themeToggle.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'))
   </script>
 </body>
 
