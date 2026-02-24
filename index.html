@@ -119,33 +119,6 @@
       margin-top: 3rem;
     }
 
-    .filters {
-      display: flex;
-      border-bottom: 1px solid var(--muted);
-    }
-
-    .filter-btn {
-      background: none;
-      border: none;
-      border-right: 1px solid var(--muted);
-      color: var(--fg-dim);
-      font-family: 'Space Mono', monospace;
-      font-size: 0.58rem;
-      font-weight: 400;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 0.5rem 0.9rem;
-      transition: color 0.15s;
-    }
-
-    .filter-btn.active {
-      color: var(--fg);
-    }
-
-    .filter-btn:hover {
-      color: var(--fg);
-    }
-
     /* ── Table ── */
     .table-header {
       display: grid;
@@ -596,16 +569,18 @@
           <path
             d="M193.741 561.472L189.843 560.923C181.86 559.797 179.171 549.644 185.558 544.746C198.219 535.029 213.755 529.76 229.734 529.76H244.884C264.089 529.76 282.5 537.36 296.083 550.899L314.838 582.491L261.113 601.962L238.453 585.385C234.648 582.598 231 579.603 227.402 576.559C217.868 568.467 206.201 563.226 193.741 561.472Z"
             fill="#FF6224" />
-          <path d="M167.218 553.167L188.791 545.588C194.399 543.62 200.55 543.805 206.029 546.115L216.329 550.464"
-            stroke="#FF6224" stroke-width="25" stroke-miterlimit="10" stroke-linecap="round" />
-          <path
-            d="M199.134 520.149C199.134 520.149 221.665 516.349 227.852 516.47C240.649 516.713 240.792 543.862 246.271 546.172L256.571 550.521"
-            stroke="#FF6224" stroke-width="25" stroke-miterlimit="10" stroke-linecap="round" />
-          <path
-            d="M245.263 535.842C245.263 535.842 252.745 531.008 258.932 531.122C271.728 531.364 286.921 558.35 286.921 567.112"
-            stroke="#FF6224" stroke-width="25" stroke-miterlimit="10" stroke-linecap="round" />
-          <path d="M286.914 567.119L305.096 535.934" stroke="#FF6224" stroke-width="25" stroke-miterlimit="10"
-            stroke-linecap="round" />
+          <g id="apple-arm-l">
+            <path d="M167.218 553.167L188.791 545.588C194.399 543.62 200.55 543.805 206.029 546.115L216.329 550.464"
+              stroke="#FF6224" stroke-width="25" stroke-miterlimit="10" stroke-linecap="round" />
+            <path
+              d="M199.134 520.149C199.134 520.149 221.665 516.349 227.852 516.47C240.649 516.713 240.792 543.862 246.271 546.172L256.571 550.521"
+              stroke="#FF6224" stroke-width="25" stroke-miterlimit="10" stroke-linecap="round" />
+            <path
+              d="M245.263 535.842C245.263 535.842 252.745 531.008 258.932 531.122C271.728 531.364 286.921 558.35 286.921 567.112"
+              stroke="#FF6224" stroke-width="25" stroke-miterlimit="10" stroke-linecap="round" />
+            <path d="M286.914 567.119L305.096 535.934" stroke="#FF6224" stroke-width="25" stroke-miterlimit="10"
+              stroke-linecap="round" />
+          </g>
           <path id="drop-2"
             d="M134.788 307.444C124.573 307.444 116.269 299.166 116.269 288.985C116.269 279.161 133.221 252.981 133.936 251.876L134.788 250.571L135.639 251.876C136.361 252.988 153.306 279.168 153.306 288.985C153.306 299.166 144.995 307.444 134.788 307.444ZM134.788 254.3C131.304 259.818 118.293 280.95 118.293 288.985C118.293 298.054 125.696 305.426 134.788 305.426C143.886 305.426 151.282 298.047 151.282 288.985C151.282 280.95 138.271 259.818 134.788 254.3Z"
             fill="white" />
@@ -621,7 +596,7 @@
           <path
             d="M538.613 569.7C510.703 604.4 484.753 644.312 395.679 644.312C332.491 644.312 298.944 600.315 273.981 575.725"
             stroke="#FF6224" stroke-width="41" stroke-miterlimit="10" stroke-linecap="round" />
-          <path
+          <path id="apple-arm-r"
             d="M555.079 502.945C541.625 511.608 524.73 530.637 513.514 544.24L479.753 584.68L542.183 630.723C542.183 630.723 555.837 614.182 570.071 595.395C584.649 576.16 610.148 529.011 595.428 505.812C588.411 494.768 566.931 495.31 555.079 502.945Z"
             fill="white" />
           <path
@@ -642,12 +617,6 @@
 
   <!-- ── Work index ── -->
   <div class="work-section">
-    <div class="filters" role="group" aria-label="Filter projects">
-      <button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
-      <button class="filter-btn" data-filter="retainer" aria-pressed="false">Retainer</button>
-      <button class="filter-btn" data-filter="build" aria-pressed="false">Build</button>
-    </div>
-
     <div class="table-header">
       <span>No.</span>
       <span>Client</span>
@@ -713,6 +682,78 @@
       <span class="project-type">Build</span>
       <span class="project-link"><a href="https://parklifestore.com" target="_blank"
           rel="noopener noreferrer">parklifestore.com</a></span>
+    </div>
+
+    <div class="project-row" data-type="retainer">
+      <span class="p-num">06</span>
+      <div class="project-info">
+        <span class="project-name">Metric</span>
+        <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
+            rel="noopener noreferrer">Baggy</a></span>
+      </div>
+      <span class="project-type">Retainer</span>
+      <span class="project-link"><a href="https://metriccoffee.com" target="_blank"
+          rel="noopener noreferrer">metriccoffee.com</a></span>
+    </div>
+
+    <div class="project-row" data-type="retainer">
+      <span class="p-num">07</span>
+      <div class="project-info">
+        <span class="project-name">Prounis</span>
+        <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
+            rel="noopener noreferrer">Baggy</a></span>
+      </div>
+      <span class="project-type">Retainer</span>
+      <span class="project-link"><a href="https://www.prounisjewelry.com" target="_blank"
+          rel="noopener noreferrer">prounisjewelry.com</a></span>
+    </div>
+
+    <div class="project-row" data-type="retainer">
+      <span class="p-num">08</span>
+      <div class="project-info">
+        <span class="project-name">Fort Standard</span>
+        <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
+            rel="noopener noreferrer">Baggy</a></span>
+      </div>
+      <span class="project-type">Retainer</span>
+      <span class="project-link"><a href="https://fortstandard.com" target="_blank"
+          rel="noopener noreferrer">fortstandard.com</a></span>
+    </div>
+
+    <div class="project-row" data-type="retainer">
+      <span class="p-num">09</span>
+      <div class="project-info">
+        <span class="project-name">Baukunst</span>
+        <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
+            rel="noopener noreferrer">Baggy</a></span>
+      </div>
+      <span class="project-type">Retainer</span>
+      <span class="project-link"><a href="https://baukunst.co" target="_blank"
+          rel="noopener noreferrer">baukunst.co</a></span>
+    </div>
+
+    <div class="project-row" data-type="retainer">
+      <span class="p-num">10</span>
+      <div class="project-info">
+        <span class="project-name">Holden</span>
+        <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
+            rel="noopener noreferrer">Baggy</a></span>
+      </div>
+      <span class="project-type">Retainer</span>
+      <span class="project-link"><a href="https://hiholden.com" target="_blank"
+          rel="noopener noreferrer">hiholden.com</a></span>
+    </div>
+
+    <div class="project-row" data-type="build">
+      <span class="p-num">11</span>
+      <div class="project-info">
+        <span class="project-name">The Orb</span>
+        <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
+            rel="noopener noreferrer">Baggy</a></span>
+      </div>
+      <span class="project-type">Build</span>
+      <span class="project-link"><a href="https://the-orb.com" target="_blank"
+          rel="noopener noreferrer">the-orb.com</a></span>
     </div>
 
   </div>
@@ -877,37 +918,6 @@
     document.addEventListener('mouseenter', () => gsap.to([cursorDot, cursorRing], { opacity: 1, duration: 0.3 }))
     } // end cursor guard
 
-    // ── Filter logic ──
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.filter-btn').forEach(b => {
-          b.classList.remove('active')
-          b.setAttribute('aria-pressed', 'false')
-        })
-        btn.classList.add('active')
-        btn.setAttribute('aria-pressed', 'true')
-        const f = btn.dataset.filter
-
-        const toShow = []
-        const toHide = []
-        document.querySelectorAll('.project-row').forEach(row => {
-          ;(f === 'all' || row.dataset.type === f ? toShow : toHide).push(row)
-        })
-
-        if (toHide.length) {
-          gsap.to(toHide, {
-            opacity: 0, duration: 0.2, ease: 'power2.in',
-            onComplete() { toHide.forEach(r => r.classList.add('hidden')) }
-          })
-        }
-
-        toShow.forEach(r => r.classList.remove('hidden'))
-        gsap.fromTo(toShow, { opacity: 0 }, { opacity: 1, duration: 0.35, ease: 'power2.out', stagger: 0.06 })
-
-        setTimeout(() => ScrollTrigger.refresh(), 250)
-      })
-    })
-
     // ── Clickable rows ──
     document.querySelectorAll('.project-row').forEach(row => {
       row.addEventListener('click', e => {
@@ -1024,6 +1034,11 @@
         .forEach(({ id, delay }) => gsap.to(id, { y: 28, duration: 1.1, ease: 'none', repeat: -1, delay }))
 
     gsap.to(['#drop-1', '#drop-2'], { y: -8, duration: 1.8, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 0.6 })
+
+    // ── Apple hand movement ──
+    // y values are in SVG units (viewBox 770px → ~330px on screen, so ~0.43 scale)
+    // Need ~18-20 SVG units to get a visible ~8px movement on screen
+    gsap.to('#apple-arm-l', { y: -18, duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: -1 })
 
     // ── Apple leans toward work section on scroll ──
     // Trigger at 200px scroll so it never fires on page load (work section
