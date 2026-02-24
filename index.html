@@ -230,6 +230,43 @@
       transform: translateX(4px);
     }
 
+    /* ── Education ── */
+    .education-section {
+      margin-top: 3rem;
+    }
+
+    .education-header {
+      padding: 0.5rem 0;
+      border-top: 1px solid var(--fg);
+      border-bottom: 1px solid var(--muted);
+      margin-bottom: 0.9rem;
+      font-size: 0.56rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      color: var(--fg);
+    }
+
+    .education-body {
+      font-size: 0.65rem;
+      line-height: 2.1;
+      letter-spacing: 0.04em;
+      font-weight: 400;
+      color: var(--fg-dim);
+    }
+
+    .education-body a {
+      color: var(--fg-dim);
+      text-decoration: none;
+      background: linear-gradient(var(--blue), var(--blue)) no-repeat 100% 100% / 0 1px;
+      transition: color 0.2s, background-size 0.35s ease;
+    }
+
+    .education-body a:hover {
+      color: var(--blue);
+      background-position: 0 100%;
+      background-size: 100% 1px;
+    }
+
     /* ── Contact ── */
     .contact-section {
       margin-top: 3rem;
@@ -447,6 +484,93 @@
         display: none;
       }
     }
+
+    /* ── Add to Cart ── */
+    .product-card {
+      padding: 0.75rem 0 0.9rem;
+      border-bottom: 1px solid var(--muted);
+      margin-bottom: 0.9rem;
+    }
+
+    .product-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.65rem;
+      line-height: 2.1;
+      letter-spacing: 0.04em;
+      color: var(--fg-dim);
+    }
+
+    .product-value.in-stock {
+      color: var(--blue);
+    }
+
+    #add-to-cart-btn {
+      display: block;
+      width: 100%;
+      margin-top: 0.85rem;
+      background: transparent;
+      border: 1px solid var(--fg);
+      color: var(--fg);
+      font-family: 'Space Mono', 'Courier New', monospace;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.7rem 1rem;
+      appearance: none;
+      outline: none;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    #add-to-cart-btn:hover:not(:disabled) {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    #add-to-cart-btn.checkout-state {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    #add-to-cart-btn.checkout-state:hover {
+      background: var(--blue);
+      color: var(--bg);
+    }
+
+    #add-to-cart-btn:disabled {
+      opacity: 0.5;
+    }
+
+    #cart-badge {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--blue);
+      color: var(--bg);
+      font-family: 'Space Mono', 'Courier New', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.75rem;
+      z-index: 9997;
+      pointer-events: none;
+      opacity: 0;
+      transform-origin: top right;
+    }
+
+    .cart-particle {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      background: var(--blue);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9996;
+    }
   </style>
 </head>
 
@@ -454,6 +578,9 @@
 
   <div class="cursor-dot"></div>
   <div class="cursor-ring"></div>
+
+  <!-- ── Cart badge (hidden until add to cart) ── -->
+  <div id="cart-badge">[ <span id="cart-count">1</span> ] in cart</div>
 
   <!-- ── Header ── -->
   <header>
@@ -620,7 +747,7 @@
     <div class="table-header">
       <span>No.</span>
       <span>Client</span>
-      <span class="col-type">Type</span>
+      <span class="col-type">Role</span>
       <span class="col-right">Live</span>
     </div>
 
@@ -631,7 +758,7 @@
         <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
             rel="noopener noreferrer">Baggy</a></span>
       </div>
-      <span class="project-type">Retainer</span>
+      <span class="project-type">Theme dev</span>
       <span class="project-link"><a href="https://eadem.co" target="_blank"
           rel="noopener noreferrer">eadem.co</a></span>
     </div>
@@ -643,7 +770,7 @@
         <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
             rel="noopener noreferrer">Baggy</a></span>
       </div>
-      <span class="project-type">Retainer</span>
+      <span class="project-type">Theme dev</span>
       <span class="project-link"><a href="https://commesi.com" target="_blank"
           rel="noopener noreferrer">commesi.com</a></span>
     </div>
@@ -655,7 +782,7 @@
         <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
             rel="noopener noreferrer">Baggy</a></span>
       </div>
-      <span class="project-type">Retainer</span>
+      <span class="project-type">Theme dev</span>
       <span class="project-link"><a href="https://831stories.com" target="_blank"
           rel="noopener noreferrer">831stories.com</a></span>
     </div>
@@ -667,7 +794,7 @@
         <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
             rel="noopener noreferrer">Baggy</a></span>
       </div>
-      <span class="project-type">Retainer</span>
+      <span class="project-type">Theme dev</span>
       <span class="project-link"><a href="https://nomaprojects.com" target="_blank"
           rel="noopener noreferrer">nomaprojects.com</a></span>
     </div>
@@ -679,7 +806,7 @@
         <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
             rel="noopener noreferrer">Baggy</a></span>
       </div>
-      <span class="project-type">Build</span>
+      <span class="project-type">Theme build</span>
       <span class="project-link"><a href="https://parklifestore.com" target="_blank"
           rel="noopener noreferrer">parklifestore.com</a></span>
     </div>
@@ -691,7 +818,7 @@
         <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
             rel="noopener noreferrer">Baggy</a></span>
       </div>
-      <span class="project-type">Retainer</span>
+      <span class="project-type">Build & dev</span>
       <span class="project-link"><a href="https://metriccoffee.com" target="_blank"
           rel="noopener noreferrer">metriccoffee.com</a></span>
     </div>
@@ -703,7 +830,7 @@
         <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
             rel="noopener noreferrer">Baggy</a></span>
       </div>
-      <span class="project-type">Retainer</span>
+      <span class="project-type">Build & dev</span>
       <span class="project-link"><a href="https://www.prounisjewelry.com" target="_blank"
           rel="noopener noreferrer">prounisjewelry.com</a></span>
     </div>
@@ -715,7 +842,7 @@
         <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
             rel="noopener noreferrer">Baggy</a></span>
       </div>
-      <span class="project-type">Retainer</span>
+      <span class="project-type">Theme dev</span>
       <span class="project-link"><a href="https://fortstandard.com" target="_blank"
           rel="noopener noreferrer">fortstandard.com</a></span>
     </div>
@@ -727,7 +854,7 @@
         <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
             rel="noopener noreferrer">Baggy</a></span>
       </div>
-      <span class="project-type">Retainer</span>
+      <span class="project-type">Build & dev</span>
       <span class="project-link"><a href="https://baukunst.co" target="_blank"
           rel="noopener noreferrer">baukunst.co</a></span>
     </div>
@@ -739,7 +866,7 @@
         <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
             rel="noopener noreferrer">Baggy</a></span>
       </div>
-      <span class="project-type">Retainer</span>
+      <span class="project-type">Theme dev</span>
       <span class="project-link"><a href="https://hiholden.com" target="_blank"
           rel="noopener noreferrer">hiholden.com</a></span>
     </div>
@@ -751,11 +878,20 @@
         <span class="project-via">Via <a href="https://baggy.studio" target="_blank"
             rel="noopener noreferrer">Baggy</a></span>
       </div>
-      <span class="project-type">Build</span>
+      <span class="project-type">Theme build</span>
       <span class="project-link"><a href="https://the-orb.com" target="_blank"
           rel="noopener noreferrer">the-orb.com</a></span>
     </div>
 
+  </div>
+
+  <!-- ── Education ── -->
+  <div class="education-section">
+    <div class="education-header">Education</div>
+    <div class="education-body">
+      <a href="https://www.superhi.com/catalog/building-shopify-stores" target="_blank"
+        rel="noopener noreferrer">Building Shopify Stores</a> — SuperHi
+    </div>
   </div>
 
   <!-- ── Contact ── -->
@@ -764,6 +900,24 @@
       <span>Contact</span>
       <span>Barcelona, Spain</span>
     </div>
+
+    <!-- Product card -->
+    <div class="product-card">
+      <div class="product-row">
+        <span class="product-label">Rating</span>
+        <span class="product-value">★★★★★ (5-star)</span>
+      </div>
+      <div class="product-row">
+        <span class="product-label">Availability</span>
+        <span class="product-value in-stock">In stock</span>
+      </div>
+      <div class="product-row">
+        <span class="product-label">Rate</span>
+        <span class="product-value">Let's talk</span>
+      </div>
+      <button id="add-to-cart-btn">[ add to cart ]</button>
+    </div>
+
     <div class="contact-body">
       <a href="mailto:martafontb@gmail.com">martafontb@gmail.com</a><br>
       <a href="https://www.linkedin.com/in/martafontb/" target="_blank" rel="noopener noreferrer">LinkedIn</a><br>
@@ -1086,6 +1240,67 @@
     window.addEventListener('keydown', resetSleepTimer)
     lenis.on('scroll', resetSleepTimer)
     resetSleepTimer()
+
+    // ── Add to Cart ──
+    const addToCartBtn = document.getElementById('add-to-cart-btn')
+    const cartBadge = document.getElementById('cart-badge')
+    let inCart = false
+
+    gsap.set(cartBadge, { opacity: 0, scale: 0, transformOrigin: 'top right' })
+
+    cartBadge.addEventListener('click', () => {
+      lenis.scrollTo('.contact-section', { offset: -20, duration: 1 })
+    })
+    cartBadge.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'))
+    cartBadge.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'))
+
+    addToCartBtn.addEventListener('click', () => {
+      if (inCart) {
+        window.open('mailto:martafontb@gmail.com')
+        return
+      }
+      inCart = true
+      addToCartBtn.disabled = true
+      addToCartBtn.textContent = '[ adding... ]'
+
+      // Create flying particle
+      const particle = document.createElement('div')
+      particle.className = 'cart-particle'
+      document.body.appendChild(particle)
+
+      const btnRect = addToCartBtn.getBoundingClientRect()
+      const startX = btnRect.left + btnRect.width / 2
+      const startY = btnRect.top + btnRect.height / 2
+
+      // Cart badge lands at top-right (compute from CSS: top 1.5rem, right 1.5rem)
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize)
+      const badgeX = window.innerWidth - 1.5 * rem
+      const badgeY = 1.5 * rem
+
+      const dx = badgeX - startX
+      const dy = badgeY - startY
+
+      gsap.set(particle, { x: startX, y: startY, xPercent: -50, yPercent: -50 })
+
+      gsap.timeline({
+        onComplete: () => {
+          particle.remove()
+          // Reveal and bounce the badge
+          cartBadge.style.pointerEvents = 'auto'
+          gsap.timeline()
+            .to(cartBadge, { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(2.5)' })
+            .to(cartBadge, { scale: 1.15, duration: 0.08, yoyo: true, repeat: 1, ease: 'power2.out' }, '-=0.05')
+          // Swap button to checkout state
+          addToCartBtn.textContent = '[ proceed to checkout \u2192 ]'
+          addToCartBtn.classList.add('checkout-state')
+          addToCartBtn.disabled = false
+        }
+      })
+        .to(particle, { x: `+=${dx}`, duration: 0.6, ease: 'none' }, 0)
+        .to(particle, { y: '-=90', duration: 0.27, ease: 'power2.out' }, 0)
+        .to(particle, { y: `+=${dy + 90}`, duration: 0.33, ease: 'power2.in' }, 0.27)
+        .to(particle, { scale: 0, opacity: 0, duration: 0.12 }, 0.48)
+    })
   </script>
 </body>
 
