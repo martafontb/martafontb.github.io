@@ -32,7 +32,6 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      cursor: none;
     }
 
     :root {
@@ -42,7 +41,6 @@
       --blue: #0061EF;
       --muted: rgba(26, 25, 23, 0.14);
       --row-hover: rgba(26, 25, 23, 0.04);
-      --cursor-border: rgba(26, 25, 23, 0.3);
       --overlay: rgba(100, 98, 94, 0.5);
       --gap: 1.5rem;
     }
@@ -54,8 +52,7 @@
         --fg-dim: rgba(232, 230, 224, 0.45);
         --muted: rgba(232, 230, 224, 0.18);
         --row-hover: rgba(232, 230, 224, 0.03);
-        --cursor-border: rgba(232, 230, 224, 0.35);
-        --overlay: rgba(17, 17, 16, 0.55);
+          --overlay: rgba(17, 17, 16, 0.55);
       }
     }
 
@@ -65,7 +62,6 @@
       --fg-dim: rgba(232, 230, 224, 0.45);
       --muted: rgba(232, 230, 224, 0.18);
       --row-hover: rgba(232, 230, 224, 0.03);
-      --cursor-border: rgba(232, 230, 224, 0.35);
       --overlay: rgba(17, 17, 16, 0.55);
     }
 
@@ -130,6 +126,7 @@
       font-size: 0.72rem;
       letter-spacing: 0.08em;
       color: var(--fg-dim);
+      cursor: pointer;
       transition: color 0.2s;
     }
 
@@ -209,10 +206,6 @@
       border-bottom: 1px solid var(--muted);
     }
 
-    .project-row.hidden {
-      display: none;
-    }
-
     .p-num {
       font-size: 0.6rem;
       font-weight: 400;
@@ -282,12 +275,13 @@
     }
 
     .project-row {
-      transition: background-color 0.2s ease, transform 0.2s ease;
+      cursor: pointer;
+      transition: background-color 0.2s ease, padding-left 0.2s ease;
     }
 
     .project-row:hover {
       background-color: var(--row-hover);
-      transform: translateX(4px);
+      padding-left: 4px;
     }
 
     /* ── Education ── */
@@ -463,11 +457,14 @@
         padding-top: 1.25rem;
       }
 
-      .bio {
-        padding-top: 0;
+      .bio-group {
         flex: 0 0 auto;
         max-width: 36ch;
         margin-top: 0.1rem;
+      }
+
+      .bio {
+        padding-top: 0;
       }
 
       .illustration-top {
@@ -495,60 +492,6 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       background-repeat: repeat;
       background-size: 160px 160px;
-    }
-
-    /* ── Custom cursor ── */
-    .cursor-dot {
-      width: 5px;
-      height: 5px;
-      background: var(--fg);
-      border-radius: 50%;
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      will-change: transform;
-      transition: background 0.2s;
-    }
-
-    .cursor-ring {
-      width: 30px;
-      height: 30px;
-      border: 1px solid var(--cursor-border);
-      border-radius: 50%;
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      will-change: transform;
-      transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease;
-    }
-
-    body.cursor-hover .cursor-ring {
-      width: 46px;
-      height: 46px;
-      border-color: var(--blue);
-    }
-
-    body.cursor-hover .cursor-dot {
-      background: var(--blue);
-    }
-
-    @media (hover: none) and (pointer: coarse) {
-      *,
-      *::before,
-      *::after {
-        cursor: auto;
-      }
-
-      .cursor-dot,
-      .cursor-ring {
-        display: none;
-      }
     }
 
     /* ── Add to Cart ── */
@@ -587,6 +530,7 @@
       padding: 0.7rem 1rem;
       appearance: none;
       outline: none;
+      cursor: pointer;
       transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
 
@@ -622,6 +566,7 @@
       padding: 0.4rem 0.75rem;
       z-index: 9997;
       pointer-events: none;
+      cursor: pointer;
       opacity: 0;
       transform-origin: top right;
     }
@@ -686,6 +631,7 @@
       text-transform: none;
       line-height: 1;
       padding: 0;
+      cursor: pointer;
       transition: color 0.15s;
     }
 
@@ -776,6 +722,7 @@
       padding: 0.7rem 1rem;
       appearance: none;
       outline: none;
+      cursor: pointer;
       transition: background 0.2s, color 0.2s;
       margin-bottom: 0.75rem;
     }
@@ -816,9 +763,6 @@
 </head>
 
 <body>
-
-  <div class="cursor-dot"></div>
-  <div class="cursor-ring"></div>
 
   <!-- ── Cart badge (hidden until add to cart) ── -->
   <div id="cart-badge">[ <span id="cart-count">1</span> ] in cart</div>
@@ -866,8 +810,10 @@
 
   <!-- ── Top: bio + illustration ── -->
   <div class="top-section">
-    <p class="bio">Shopify developer. Custom theme work for independent brands, done remotely from Barcelona.</p>
-    <p class="bio-note">✓ Free shipping &nbsp;·&nbsp; Satisfaction guaranteed</p>
+    <div class="bio-group">
+      <p class="bio">Shopify developer. Custom theme work for independent brands, done remotely from Barcelona.</p>
+      <p class="bio-note">✓ Free shipping &nbsp;·&nbsp; Satisfaction guaranteed</p>
+    </div>
 
     <div class="illustration-top">
       <svg id="svg-apple" width="773" height="770" viewBox="0 0 773 770" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -1028,7 +974,7 @@
       <span class="col-right">Live</span>
     </div>
 
-    <div class="project-row" data-type="retainer">
+    <div class="project-row">
       <span class="p-num">01</span>
       <div class="project-info">
         <span class="project-name">Eadem</span>
@@ -1040,7 +986,7 @@
           rel="noopener noreferrer">eadem.co</a></span>
     </div>
 
-    <div class="project-row" data-type="retainer">
+    <div class="project-row">
       <span class="p-num">02</span>
       <div class="project-info">
         <span class="project-name">Comme Si</span>
@@ -1052,7 +998,7 @@
           rel="noopener noreferrer">commesi.com</a></span>
     </div>
 
-    <div class="project-row" data-type="retainer">
+    <div class="project-row">
       <span class="p-num">03</span>
       <div class="project-info">
         <span class="project-name">831 Stories</span>
@@ -1064,7 +1010,7 @@
           rel="noopener noreferrer">831stories.com</a></span>
     </div>
 
-    <div class="project-row" data-type="retainer">
+    <div class="project-row">
       <span class="p-num">04</span>
       <div class="project-info">
         <span class="project-name">Noma Projects</span>
@@ -1076,7 +1022,7 @@
           rel="noopener noreferrer">nomaprojects.com</a></span>
     </div>
 
-    <div class="project-row" data-type="build">
+    <div class="project-row">
       <span class="p-num">05</span>
       <div class="project-info">
         <span class="project-name">Park Life</span>
@@ -1088,7 +1034,7 @@
           rel="noopener noreferrer">parklifestore.com</a></span>
     </div>
 
-    <div class="project-row" data-type="retainer">
+    <div class="project-row">
       <span class="p-num">06</span>
       <div class="project-info">
         <span class="project-name">Metric</span>
@@ -1100,7 +1046,7 @@
           rel="noopener noreferrer">metriccoffee.com</a></span>
     </div>
 
-    <div class="project-row" data-type="retainer">
+    <div class="project-row">
       <span class="p-num">07</span>
       <div class="project-info">
         <span class="project-name">Prounis</span>
@@ -1112,7 +1058,7 @@
           rel="noopener noreferrer">prounisjewelry.com</a></span>
     </div>
 
-    <div class="project-row" data-type="retainer">
+    <div class="project-row">
       <span class="p-num">08</span>
       <div class="project-info">
         <span class="project-name">Fort Standard</span>
@@ -1124,7 +1070,7 @@
           rel="noopener noreferrer">fortstandard.com</a></span>
     </div>
 
-    <div class="project-row" data-type="retainer">
+    <div class="project-row">
       <span class="p-num">09</span>
       <div class="project-info">
         <span class="project-name">Baukunst</span>
@@ -1136,7 +1082,7 @@
           rel="noopener noreferrer">baukunst.co</a></span>
     </div>
 
-    <div class="project-row" data-type="retainer">
+    <div class="project-row">
       <span class="p-num">10</span>
       <div class="project-info">
         <span class="project-name">Holden</span>
@@ -1148,7 +1094,7 @@
           rel="noopener noreferrer">hiholden.com</a></span>
     </div>
 
-    <div class="project-row" data-type="build">
+    <div class="project-row">
       <span class="p-num">11</span>
       <div class="project-info">
         <span class="project-name">The Orb</span>
@@ -1324,25 +1270,6 @@
       document.body.classList.add('loaded');
     });
 
-    // ── Custom cursor ──
-    const cursorDot = document.querySelector('.cursor-dot')
-    const cursorRing = document.querySelector('.cursor-ring')
-
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    window.addEventListener('mousemove', e => {
-      gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.05 })
-      gsap.to(cursorRing, { x: e.clientX, y: e.clientY, duration: 0.22, ease: 'power2.out' })
-    })
-
-    document.querySelectorAll('a, button, .project-row, #svg-apple, #svg-hello').forEach(el => {
-      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'))
-      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'))
-    })
-
-    document.addEventListener('mouseleave', () => gsap.to([cursorDot, cursorRing], { opacity: 0, duration: 0.3 }))
-    document.addEventListener('mouseenter', () => gsap.to([cursorDot, cursorRing], { opacity: 1, duration: 0.3 }))
-    } // end cursor guard
-
     // ── Clickable rows ──
     document.querySelectorAll('.project-row').forEach(row => {
       row.addEventListener('click', e => {
@@ -1421,6 +1348,10 @@
     gsap.fromTo('.bio',
       { clipPath: 'inset(0 0 100% 0)' },
       { clipPath: 'inset(0 0 0% 0)', duration: 0.75, ease: 'power3.inOut', delay: 0.12, clearProps: 'clipPath' }
+    )
+    gsap.fromTo('.bio-note',
+      { clipPath: 'inset(0 0 100% 0)' },
+      { clipPath: 'inset(0 0 0% 0)', duration: 0.75, ease: 'power3.inOut', delay: 0.24, clearProps: 'clipPath' }
     )
     gsap.from('.illustration-top', {
       y: 20, opacity: 0, duration: 0.9, delay: 0.1, ease: 'power3.out'
@@ -1559,27 +1490,17 @@
     document.getElementById('mini-cart-close').addEventListener('click', closeMiniCart)
     document.getElementById('mini-cart-overlay').addEventListener('click', closeMiniCart)
     document.getElementById('mini-cart-checkout').addEventListener('click', () => {
-      window.open('mailto:martafontb@gmail.com')
+      window.location.href = 'mailto:martafontb@gmail.com'
     })
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && miniCartOpen) closeMiniCart()
     })
 
-    // Add cursor-hover to mini cart interactive elements
-    ;['#mini-cart-close', '#mini-cart-checkout', '.cart-contact-link a'].forEach(sel => {
-      document.querySelectorAll(sel).forEach(el => {
-        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'))
-        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'))
-      })
-    })
-
     cartBadge.addEventListener('click', () => miniCartOpen ? closeMiniCart() : openMiniCart())
-    cartBadge.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'))
-    cartBadge.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'))
 
     addToCartBtn.addEventListener('click', () => {
       if (inCart) {
-        window.open('mailto:martafontb@gmail.com')
+        window.location.href = 'mailto:martafontb@gmail.com'
         return
       }
       inCart = true
@@ -1635,8 +1556,6 @@
       localStorage.setItem('theme', next)
     })
 
-    themeToggle.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'))
-    themeToggle.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'))
   </script>
 </body>
 
